@@ -1,0 +1,15 @@
+baseURL = 'https://berman82312.github.io'
+languageCode = 'en-us'
+title = '魚說'
+theme = 'book'
+summaryLength = 150
+hasCJKLanguage = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      hardWraps = true
+
+[params]
+  BookSection = 'posts'
+  BookToC = false
