@@ -1,0 +1,373 @@
+<!doctype html><html lang=en dir=ltr>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="( 2017-05-03 寫作當下使用的是 webpack 2.3.3) Webpack 是個神奇且好用的東西，但 webpack2 的 document 目前不盡完善，有許多狀況與細節並沒有解釋或解釋詳盡。在這裡簡單的介紹使用 Webpack 完成 Code splitting ，以及使用 Chunkhash 達成解決 File Caching 的過程。 打包 (Bundle) # 打包是最基本的 Webpack 功能，假設我們有個檔案叫index.js，裡面長得像是 'use strict'; var axios = require('axios'); (function(){ ... 那麼，基本的webpack.conf">
+<meta name=theme-color content="#FFFFFF">
+<meta name=color-scheme content="light dark"><meta property="og:title" content="Webpack Basic Usage">
+<meta property="og:description" content="( 2017-05-03 寫作當下使用的是 webpack 2.3.3) Webpack 是個神奇且好用的東西，但 webpack2 的 document 目前不盡完善，有許多狀況與細節並沒有解釋或解釋詳盡。在這裡簡單的介紹使用 Webpack 完成 Code splitting ，以及使用 Chunkhash 達成解決 File Caching 的過程。 打包 (Bundle) # 打包是最基本的 Webpack 功能，假設我們有個檔案叫index.js，裡面長得像是 'use strict'; var axios = require('axios'); (function(){ ... 那麼，基本的webpack.conf">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://berman82312.github.io/posts/webpack-basic-usage/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2017-05-04T23:22:09+00:00">
+<meta property="article:modified_time" content="2017-05-04T23:22:09+00:00">
+<title>Webpack Basic Usage | 魚說</title>
+<link rel=manifest href=/manifest.json>
+<link rel=icon href=/favicon.png type=image/x-icon>
+<link rel=stylesheet href=/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css integrity="sha256-RhgbyTN1upMgJudTs3xA5v+LsWqe93DHi8xmPkV3sbo=" crossorigin=anonymous>
+<script defer src=/flexsearch.min.js></script>
+<script defer src=/en.search.min.63baecdf1bce8e427022a87eb99db4cdf2f868cedecca3a4a610f494fbd19612.js integrity="sha256-Y7rs3xvOjkJwIqh+uZ20zfL4aM7ezKOkphD0lPvRlhI=" crossorigin=anonymous></script>
+</head>
+<body dir=ltr>
+<input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control>
+<main class="container flex">
+<aside class=book-menu>
+<div class=book-menu-content>
+<nav>
+<h2 class=book-brand>
+<a class="flex align-center" href=/><span>魚說</span>
+</a>
+</h2>
+<div class=book-search>
+<input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/>
+<div class="book-search-spinner hidden"></div>
+<ul id=book-search-results></ul>
+</div>
+<ul>
+<li>
+<a href=https://berman82312.github.io/posts/creating-a-new-theme/>Creating a New Theme</a>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/migrate-from-jekyll/>Migrate to Hugo from Jekyll</a>
+</li>
+<li>
+<input type=checkbox id=section-e946ed0317b1a0c1eba72dd278d419c9 class=toggle>
+<label for=section-e946ed0317b1a0c1eba72dd278d419c9 class="flex justify-between">
+<a role=button>Test data</a>
+</label>
+<ul>
+<li>
+<a href=https://berman82312.github.io/posts/test/%E6%B8%AC%E8%A9%A6%E4%B8%AD%E6%96%87%E6%AA%94%E5%90%8D/>測試中文檔名</a>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/test/hello-world/>Hello World</a>
+</li>
+</ul>
+</li>
+<li>
+<input type=checkbox id=section-d81bfd70be97643134a0ef0fd7f1d2e4 class=toggle>
+<label for=section-d81bfd70be97643134a0ef0fd7f1d2e4 class="flex justify-between">
+<a role=button>Stories</a>
+</label>
+<ul>
+<li>
+<a href=https://berman82312.github.io/posts/stories/practice-20170711/>【練習】化妝舞會、飛彈、孔雀魚</a>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/stories/practice-20170626/>【練習】古蘭經、北極星、諾亞方舟</a>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/stories/practice-20170508/>【練習】麒麟、城堡、鑰匙</a>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/stories/practice-20170503/>【練習】月蝕、表現主義、布朗尼</a>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/stories/practice-20170430/>【練習】衣架、軟玉溫香、文化資產</a>
+</li>
+</ul>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/webpack-basic-usage/ class=active>Webpack Basic Usage</a>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/when-to-refactor/>什麼時候做重構 (Refactor)？</a>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/eisenhower-method/>四象限管理法的一些心得</a>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/typescript-import-module/>Typescript import module</a>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/goisforlovers/>(Hu)go Template Primer</a>
+</li>
+<li>
+<a href=https://berman82312.github.io/posts/hugoisforlovers/>Getting Started with Hugo</a>
+</li>
+</ul>
+<ul>
+<li>
+<a href=/posts/>
+Not My Blog
+</a>
+</li>
+</ul>
+</nav>
+<script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+</div>
+</aside>
+<div class=book-page>
+<header class=book-header>
+<div class="flex align-center justify-between">
+<label for=menu-control>
+<img src=/svg/menu.svg class=book-icon alt=Menu>
+</label>
+<strong>Webpack Basic Usage</strong>
+<label for=toc-control>
+</label>
+</div>
+</header>
+<article class=markdown>
+<h1>
+<a href=/posts/webpack-basic-usage/>Webpack Basic Usage</a>
+</h1>
+<h5>May 4, 2017</h5>
+<div>
+<a href=/tags/webpack/>webpack</a>
+</div>
+<p>( 2017-05-03 寫作當下使用的是 webpack 2.3.3)</p>
+<p>Webpack 是個神奇且好用的東西，但 webpack2 的 document 目前不盡完善，有許多狀況與細節並沒有解釋或解釋詳盡。在這裡簡單的介紹使用 Webpack 完成 Code splitting ，以及使用 Chunkhash 達成解決 File Caching 的過程。</p>
+<h2 id=打包-bundle>
+打包 (Bundle)
+<a class=anchor href=#%e6%89%93%e5%8c%85-bundle>#</a>
+</h2>
+<p>打包是最基本的 Webpack 功能，假設我們有個檔案叫<code>index.js</code>，裡面長得像是</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#e6db74>&#39;use strict&#39;</span>;
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>axios</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;axios&#39;</span>);
+
+(<span style=color:#66d9ef>function</span>(){
+...
+</code></pre></div><p>那麼，基本的<code>webpack.config.js</code>大概定義如下</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#e6db74>&#39;use strict&#39;</span>;
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>webpack</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;webpack&#39;</span>);
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>path</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;path&#39;</span>);
+
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>config</span> <span style=color:#f92672>=</span> {
+    <span style=color:#a6e22e>entry</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>app</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;./src/index.js&#39;</span>
+    },
+    <span style=color:#a6e22e>output</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>filename</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;[name].js&#39;</span>,
+        <span style=color:#a6e22e>path</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>path</span>.<span style=color:#a6e22e>resolve</span>(<span style=color:#a6e22e>__dirname</span>, <span style=color:#e6db74>&#39;dist&#39;</span>)
+    }
+}
+
+<span style=color:#a6e22e>module</span>.<span style=color:#a6e22e>exports</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>config</span>;
+</code></pre></div><p>當我們執行<code>webpack --config webpack.config.js</code>之後，webpack 大概做了以下的事情：</p>
+<ol>
+<li>根據<code>entry</code>的定義，知道要打包一個叫做<code>app</code>的檔案，從<code>./src/index.js</code>作為起始文件，開始讀取檔案</li>
+<li><code>index.js</code>裡面<code>require('axios')</code>，因此在執行環境中尋找<code>axios</code>插件，一般會從<code>entry</code>的相對路徑以及<code>node_modules</code>裡面找。</li>
+<li>把<code>index.js</code>和<code>axios</code>打包成一份檔案輸出為<code>app.js</code>，<code>output</code>的<code>[name].js</code>就是指檔案名稱用<code>entry</code>所指定的，然後檔案放置的位置以<code>path</code>指定。其中<code>__dirname</code>是指執行<code>webpack</code>指令的根目錄</li>
+</ol>
+<p>也就是說，我們開發可以結構化地把檔案分拆，像一般寫程式那樣。但我們不需要在 template 中用許多個<code>&lt;script></code>將所有<code>js</code>檔案載入，並還要注意先後順序。執行完<code>webpack</code>之後，只需要載入<code>app.js</code>就可以了。</p>
+<h3 id=多個檔案打包成一個>
+多個檔案打包成一個
+<a class=anchor href=#%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88%e6%89%93%e5%8c%85%e6%88%90%e4%b8%80%e5%80%8b>#</a>
+</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#e6db74>&#39;use strict&#39;</span>;
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>webpack</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;webpack&#39;</span>);
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>path</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;path&#39;</span>);
+
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>config</span> <span style=color:#f92672>=</span> {
+    <span style=color:#a6e22e>entry</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>app</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;./src/index.js&#39;</span>, <span style=color:#e6db74>&#39;./src/auth.js&#39;</span>, <span style=color:#e6db74>&#39;./src/message.js&#39;</span>]
+    },
+    <span style=color:#a6e22e>output</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>filename</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;[name].js&#39;</span>,
+        <span style=color:#a6e22e>path</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>path</span>.<span style=color:#a6e22e>resolve</span>(<span style=color:#a6e22e>__dirname</span>, <span style=color:#e6db74>&#39;dist&#39;</span>)
+    }
+}
+
+<span style=color:#a6e22e>module</span>.<span style=color:#a6e22e>exports</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>config</span>;
+</code></pre></div><p>webpack 會按照陣列的順序，一一打包檔案，然後整合為一包<code>app.js</code></p>
+<h3 id=打包成多個檔案>
+打包成多個檔案
+<a class=anchor href=#%e6%89%93%e5%8c%85%e6%88%90%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88>#</a>
+</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#e6db74>&#39;use strict&#39;</span>;
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>webpack</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;webpack&#39;</span>);
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>path</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;path&#39;</span>);
+
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>config</span> <span style=color:#f92672>=</span> {
+    <span style=color:#a6e22e>entry</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>app</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;./src/index.js&#39;</span>,
+        <span style=color:#a6e22e>auth</span><span style=color:#f92672>:</span> [<span style=color:#e6db74>&#39;./src/auth.js&#39;</span>, <span style=color:#e6db74>&#39;./src/user.js&#39;</span>],
+        <span style=color:#a6e22e>message</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;./src/message.js&#39;</span>
+    },
+    <span style=color:#a6e22e>output</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>filename</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;[name].js&#39;</span>,
+        <span style=color:#a6e22e>path</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>path</span>.<span style=color:#a6e22e>resolve</span>(<span style=color:#a6e22e>__dirname</span>, <span style=color:#e6db74>&#39;dist&#39;</span>)
+    }
+}
+
+<span style=color:#a6e22e>module</span>.<span style=color:#a6e22e>exports</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>config</span>;
+</code></pre></div><p>這樣設定的話，webpack 最終就會打包出三個檔案，分別是<code>app.js</code>,<code>auth.js</code>,<code>message.js</code></p>
+<h2 id=拆分-code-splitting>
+拆分 (Code Splitting)
+<a class=anchor href=#%e6%8b%86%e5%88%86-code-splitting>#</a>
+</h2>
+<p>每次執行<code>webpack</code>，webpack就會幫我們將檔案重新打包、更新。但隨著架構愈來愈大時，我們自己的檔案、使用的第三方套件增多，我們打包出來的檔案也會愈來愈肥。這對頁面載入將是個很大的負荷。有時候我們可能只是改個一兩行，但整個<code>app.js</code>就會需要更新，使用者端就需要重新載入新的一整大包。</p>
+<p>但其實第三方套件並不像我們自己的 Code 那麼經常變動，通常是我們自己想升版才會更動。而且寫<code>js</code>我們會使用的第三方套件通常挺多。如果能將這些部分與我們自己的 Code 分開打包成不同的一包，在我們更新自己的 Code 的時候，只會更新我們 Code 整合的那包，不會更動到第三方套件的那一包，可以減少一定程度的 Loading 負荷。</p>
+<p>首先我們將<code>webpack.config.js</code>中的 <code>config</code> 更新成</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>config</span> <span style=color:#f92672>=</span> {
+    <span style=color:#a6e22e>entry</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>app</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;./src/index.js&#39;</span>,
+        <span style=color:#a6e22e>vendor</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;axios&#39;</span>
+    },
+    <span style=color:#a6e22e>output</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>filename</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;[name].js&#39;</span>,
+        <span style=color:#a6e22e>path</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>path</span>.<span style=color:#a6e22e>resolve</span>(<span style=color:#a6e22e>__dirname</span>, <span style=color:#e6db74>&#39;dist&#39;</span>)
+    }
+}
+</code></pre></div><p>執行<code>webpack</code>，<code>axios</code>這個第三方套件的會被打包進<code>vendor.js</code>，但我們會發現<code>app.js</code>裡面還是有<code>axios</code>，這是因為不同的<code>entry</code>，webpack 會分開打包，各自的 dependencies 各自處理。</p>
+<p>為了讓共同的第三方套件都打包成同一包，我們將<code>webpack.config.js</code>更改為</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>config</span> <span style=color:#f92672>=</span> {
+    <span style=color:#a6e22e>entry</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>app</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;./src/index.js&#39;</span>,
+        <span style=color:#a6e22e>vendor</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;axios&#39;</span>
+    },
+    <span style=color:#a6e22e>output</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>filename</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;[name].js&#39;</span>,
+        <span style=color:#a6e22e>path</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>path</span>.<span style=color:#a6e22e>resolve</span>(<span style=color:#a6e22e>__dirname</span>, <span style=color:#e6db74>&#39;dist&#39;</span>)
+    },
+    <span style=color:#a6e22e>plugins</span><span style=color:#f92672>:</span> [
+        <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>webpack</span>.<span style=color:#a6e22e>optimize</span>.<span style=color:#a6e22e>CommonsChunkPlugin</span>({
+            <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;vendor&#39;</span>
+        })
+    ]
+}
+</code></pre></div><p><code>CommonsChunkPlugin</code>會將各個<code>entry</code>中共同的套件包裝到指定的<code>name</code>檔案。所以當我們執行<code>webpack</code>之後，我們會發現這次<code>axios</code>只出現在<code>vendor.js</code>了。</p>
+<p>我們可以進一步將<code>webpack.config.js</code>再改為</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>config</span> <span style=color:#f92672>=</span> {
+    <span style=color:#a6e22e>entry</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>app</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;./src/index.js&#39;</span>,
+    },
+    <span style=color:#a6e22e>output</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>filename</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;[name].js&#39;</span>,
+        <span style=color:#a6e22e>path</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>path</span>.<span style=color:#a6e22e>resolve</span>(<span style=color:#a6e22e>__dirname</span>, <span style=color:#e6db74>&#39;dist&#39;</span>)
+    },
+    <span style=color:#a6e22e>plugins</span><span style=color:#f92672>:</span> [
+        <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>webpack</span>.<span style=color:#a6e22e>optimize</span>.<span style=color:#a6e22e>CommonsChunkPlugin</span>({
+            <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;vendor&#39;</span>,
+            <span style=color:#a6e22e>minChunks</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>function</span> (<span style=color:#a6e22e>module</span>) {
+                <span style=color:#75715e>// this assumes your vendor imports exist in the node_modules
+</span><span style=color:#75715e></span>                <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>module</span>.<span style=color:#a6e22e>context</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>module</span>.<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>indexOf</span>(<span style=color:#e6db74>&#39;node_modules&#39;</span>) <span style=color:#f92672>!==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>;
+            }
+        })
+    ]
+}
+</code></pre></div><p>其中<code>minChunks</code>是指定判定套件為共同套件的條件，將其打包進指定檔案中。若是將<code>minChunks</code>指定為 <code>2</code>，那麼就是說在各<code>entry</code>中，總共出現<code>2</code>次以上的套件就將其打包進<code>vendor.js</code>這的檔案。而我們在這邊寫的 callback，是判斷套件若是有出現在<code>node_modules</code>中的，就視為共同套件打包進<code>vendor.js</code>中。</p>
+<p>值得特別注意的是在這次的<code>webpack.config.js</code>中，我們的<code>entry</code>沒有指定<code>vendor</code>，僅僅靠<code>CommonsChunkPlugin</code>完成第三方套件的打包。這在 webpack 稱為 Implicit Common Vendor Chunk。</p>
+<h2 id=版本-chunkhash>
+版本 (Chunkhash)
+<a class=anchor href=#%e7%89%88%e6%9c%ac-chunkhash>#</a>
+</h2>
+<p>瀏覽器多有 Cache 的機制，static file (image, css, js&mldr;etc)會留有一份快取在 client 端。在一定時間內，若是瀏覽器發現這網站要求<code>app.js</code>，而<code>app.js</code>在本地端有一份 copy ，那瀏覽器會使用本地的<code>app.js</code> copy。這個機制是為了優化網頁的讀取，但卻造成了一個麻煩的情況。當我們更新了<code>app.js</code>，但因為檔名沒變，瀏覽器不會知道檔案內容改變了，會繼續使用本地端較舊的 copy 版本。</p>
+<p>為了解決這個問題，通常的辦法是在檔案名稱加上版本號：<code>app.v1.js</code>。當我們更新<code>app.js</code>時，就更新版本號：<code>app.v2.js</code>，讓瀏覽器認為是要求一份不同的 js ，達到即時更新的效果。</p>
+<p>身為一位工程師，改 code 才是我們的本職。需要在每次改 code 之後去注意版本號、手動更新，是一件麻煩且浪費我們腦內記憶體的事情。透過 webpack ，我們可以輕鬆達成這件事。</p>
+<p>將<code>webpack.config.js</code>中的<code>output</code>改為</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#a6e22e>output</span><span style=color:#f92672>:</span> {
+    <span style=color:#a6e22e>filename</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;[name].[chunkhash].js&#39;</span>,
+    <span style=color:#a6e22e>path</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>path</span>.<span style=color:#a6e22e>resolve</span>(<span style=color:#a6e22e>__dirname</span>, <span style=color:#e6db74>&#39;dist&#39;</span>)
+...
+}
+</code></pre></div><p>webpack 打包檔案之後，會在檔案名自動添上一個<code>chunkhash</code>，所以我們會得到一個像是<code>app.3c75dbb16437c09415ac.js</code>的檔案名稱。每次更改 code，重新打包，webpack 就會產生一個新的 <code>chunkhash</code>，也就達成了更改版本的效果。</p>
+<p>每個打包出的檔案的<code>chunkhash</code>都是 unique 的，這在打包成不同檔案的時候，可以幫助我們達到一個目的：更新<code>app.js</code>時，若<code>vendor.js</code>不需要更新，他可以維持舊的<code>chunkhash</code>，進而達到讓瀏覽器「只更新需要更新的套件」這件事。</p>
+<p>但實際執行<code>webpack</code>後，我們會發現當我們更改了一小段<code>index.js</code>的 code，產出的 <code>app.[chunkhash].js</code> 和 <code>vendor.[chunkhash].js</code> 的<code>[chunkhash]</code>部分都更新了，並沒有達到預期的只更新<code>app.js</code>的效果。</p>
+<p>這是因為每次 webpack 在執行打包時，會將一些 runtime code 帶進打包出的 Common Chunk 之中，也就是我們的 <code>vendor.js</code>，來幫助打包後的檔案處理引入插件。為了解決這個問題，我們再引入一個叫做 <code>manifest</code> 的檔案來處理這個問題。</p>
+<h3 id=manifest>
+manifest
+<a class=anchor href=#manifest>#</a>
+</h3>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>config</span> <span style=color:#f92672>=</span> {
+    <span style=color:#a6e22e>entry</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>app</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;/src/index.js&#39;</span>
+    },
+    <span style=color:#a6e22e>output</span><span style=color:#f92672>:</span> {
+        <span style=color:#a6e22e>filename</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;[name].[chunkhash].js&#39;</span>,
+        <span style=color:#a6e22e>path</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>path</span>.<span style=color:#a6e22e>resolve</span>(<span style=color:#a6e22e>__dirname</span>, <span style=color:#e6db74>&#39;dist&#39;</span>)
+    },
+    <span style=color:#a6e22e>plugins</span><span style=color:#f92672>:</span> [
+       <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>webpack</span>.<span style=color:#a6e22e>optimize</span>.<span style=color:#a6e22e>CommonsChunkPlugin</span>({
+           <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;vendor&#39;</span>,
+           <span style=color:#a6e22e>minChunks</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>function</span> (<span style=color:#a6e22e>module</span>) {
+               <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>module</span>.<span style=color:#a6e22e>context</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#a6e22e>module</span>.<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>indexOf</span>(<span style=color:#e6db74>&#39;node_modules&#39;</span>) <span style=color:#f92672>!==</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>;
+           }
+       }),
+       <span style=color:#75715e>// extract all common modules from vendor and app bundles
+</span><span style=color:#75715e></span>       <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>webpack</span>.<span style=color:#a6e22e>optimize</span>.<span style=color:#a6e22e>CommonsChunkPlugin</span>({
+           <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;manifest&#39;</span>
+       })
+    ]
+}
+</code></pre></div><p>這樣的設定下，首先 webpack 會把屬於 <code>node_modules</code> 中的第三方套件通通打包進 <code>vendor</code>，然後再把 <code>app</code> 和 <code>vendor</code> 共同的 <code>modules</code> 打包進 <code>manifest</code>。但因為 <code>vendor</code> 和 <code>app</code> 並沒有共同套件了，所以 <code>manifest</code> 最後只剩下 runtime code。</p>
+<p>之後 html 只要按順序把 <code>manifest.[chunkhash].js</code>, <code>vendor.[chunkhash].js</code> 和 <code>app.[chunkhash].js</code>載入，就可以讓我們的 scripts 動起來了。雖然這樣我們多載入了一個檔案，但少變動 <code>vendor</code> 所省下的 loading 總的來說還是有益的。</p>
+<h2 id=html-template>
+HTML template
+<a class=anchor href=#html-template>#</a>
+</h2>
+<p>一切都已逼近完美，只差當每次執行完<code>webpack</code>，我們就要更新一次我們的 template，把新的<code>&lt;script></code>部分的檔案名中的<code>chunkhash</code>更新。官方的教學是透過<code>ChunkManifestPlugin</code>產出一個<code>manifest.json</code>，會帶有檔案對應的資訊，然後把它直接在 template inline 引入。這種人工的作法實在令人覺得功虧一簣。另外還有一種方法是透過<code>HtmlWebpackPlugin</code>幫我們產生一個帶有<code>chunkhash</code>版本號的<code>&lt;script></code>的 html template。但使用方式略複雜，而且對於 template 有需多限制，若要客製化還要再學習許多插件。</p>
+<p>基於我們只是想要簡單的讓 webpack 幫我們自動換版本號而已，小魚自己實在不想為了這件事再多加入這些東西。經過一段時間的 google + stackoverflow 之後，先寫出了以下的暴力做法。</p>
+<p>在<code>webpack.config.js</code>的<code>plugin</code>處多加一個自己寫的 Plugin</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-javascript data-lang=javascript><span style=color:#a6e22e>plugins</span><span style=color:#f92672>:</span>[
+    ...,
+    <span style=color:#66d9ef>function</span> () {
+        <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>templatePath</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>path</span>.<span style=color:#a6e22e>resolve</span>(<span style=color:#a6e22e>__dirname</span>, <span style=color:#e6db74>&#39;templates&#39;</span>);
+        <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>rawFilePath</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>path</span>.<span style=color:#a6e22e>join</span>(<span style=color:#a6e22e>templatePath</span>, <span style=color:#e6db74>&#39;src/scripts.html&#39;</span>);
+        <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>outFilePath</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>path</span>.<span style=color:#a6e22e>join</span>(<span style=color:#a6e22e>templatePath</span>, <span style=color:#e6db74>&#39;base/partials/scripts.html&#39;</span>);
+        <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>str</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>fs</span>.<span style=color:#a6e22e>readFileSync</span>(<span style=color:#a6e22e>rawFilePath</span>, <span style=color:#e6db74>&#39;utf8&#39;</span>);
+        <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>env</span>.<span style=color:#a6e22e>NODE_ENV</span> <span style=color:#f92672>===</span> <span style=color:#e6db74>&#39;production&#39;</span>) {
+            <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>plugin</span>(<span style=color:#e6db74>&#34;done&#34;</span>, <span style=color:#66d9ef>function</span> (<span style=color:#a6e22e>stats</span>) {
+                <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>counter</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+                <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>replaceInFile</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>function</span> (<span style=color:#a6e22e>toReplace</span>, <span style=color:#a6e22e>replacement</span>) {
+                    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>replacer</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>function</span> (<span style=color:#a6e22e>match</span>) {
+                        <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#39;Replacing %s =&gt; %s&#39;</span>, <span style=color:#a6e22e>match</span>, <span style=color:#a6e22e>replacement</span>);
+                        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>replacement</span>
+                    };
+                    <span style=color:#a6e22e>str</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>str</span>.<span style=color:#a6e22e>replace</span>(<span style=color:#66d9ef>new</span> RegExp(<span style=color:#a6e22e>toReplace</span>, <span style=color:#e6db74>&#39;g&#39;</span>), <span style=color:#a6e22e>replacer</span>);
+                    <span style=color:#a6e22e>counter</span><span style=color:#f92672>++</span>;
+                    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>counter</span> <span style=color:#f92672>===</span> <span style=color:#a6e22e>stats</span>.<span style=color:#a6e22e>compilation</span>.<span style=color:#a6e22e>chunks</span>.<span style=color:#a6e22e>length</span>)
+                        <span style=color:#a6e22e>fs</span>.<span style=color:#a6e22e>writeFileSync</span>(<span style=color:#a6e22e>outFilePath</span>, <span style=color:#a6e22e>str</span>);
+                };
+                <span style=color:#a6e22e>stats</span>.<span style=color:#a6e22e>compilation</span>.<span style=color:#a6e22e>chunks</span>.<span style=color:#a6e22e>forEach</span>(<span style=color:#66d9ef>function</span> (<span style=color:#a6e22e>chunk</span>) {
+                    <span style=color:#a6e22e>replaceInFile</span>(
+                        <span style=color:#a6e22e>chunk</span>.<span style=color:#a6e22e>name</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;.js&#39;</span>,
+                        <span style=color:#a6e22e>chunk</span>.<span style=color:#a6e22e>name</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;.&#39;</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>chunk</span>.<span style=color:#a6e22e>renderedHash</span> <span style=color:#f92672>+</span> <span style=color:#e6db74>&#39;.js&#39;</span>
+                    );
+                });
+            });
+        }
+        <span style=color:#66d9ef>else</span> {
+            <span style=color:#a6e22e>fs</span>.<span style=color:#a6e22e>createReadStream</span>(<span style=color:#a6e22e>rawFilePath</span>).<span style=color:#a6e22e>pipe</span>(<span style=color:#a6e22e>fs</span>.<span style=color:#a6e22e>createWriteStream</span>(<span style=color:#a6e22e>outFilePath</span>));
+        }
+    }
+]
+</code></pre></div><p>我們把<code>&lt;scripts></code>部分的 html 獨立成一個 template，然後直接使用<code>node</code>的<code>fs</code>來進行檔案的 I/O，讀入<code>&lt;script></code>的 template ，然後將檔案中的檔案名稱置換成帶有<code>chunkhash</code>的字串，再輸出成<code>production</code>用的 template。</p>
+<p>我們設定<code>this.plugin</code>只在<code>NODE_ENV === 'production'</code>的時候執行，並且是在 webpack 已經打包完的<code>done</code>的階段，把結果的資訊讀出來，然後進行操作。而在開發模式下，不用多帶<code>chunkhash</code>可以省下一些麻煩，所以就略過這步驟。也可以把這段 code 寫成一個插件，然後在<code>webpack.config.js</code>引入，會讓程式碼看起來乾淨些。這邊只是一個簡單的快速介紹。</p>
+<p>要注意的是，雖然官方文件說：</p>
+<blockquote>
+<p>Running <code>webpack -p</code> (or equivalently <code>webpack --optimize-minimize --define process.env.NODE_ENV="'production'"</code>).</p>
+</blockquote>
+<p>但這裡的<code>process.env.NODE_ENV</code>並不是指定你執行時的<code>NODE_ENV</code>，而是對於 webpack 而言的變數。因此若我們就這麼執行<code>webpack -p --config webpack.config.js</code>，我們寫的那段 plugin 所認得的<code>process.env.NODE_ENV</code>是執行<code>webpack</code>指令的 node 環境，而非 webpack 自己設定的變數，webpack 還是只會跑開發部分的程式碼。（小魚還沒深入去了解其中的原因）</p>
+<p>要解決這個問題，你可以使用官方的<code>EnvironmentPlugin</code>來處理，或者簡單地把你的指令改成<code>NODE_ENV=production webpack -p --config webpack.config.js</code>就可以了。</p>
+<p>如此一來，在 production 環境下執行 <code>NODE_ENV=production webpack -p --config webpack.config.js</code>，webpack 就會幫我們把檔案打包好，加上<code>chunkhash</code>，然後再幫我們更改<code>&lt;script></code>的 template 了。</p>
+<h2 id=結語>
+結語
+<a class=anchor href=#%e7%b5%90%e8%aa%9e>#</a>
+</h2>
+<p>這只是最、最、最基本的 webpack 功能，完全還無法體現 webpack 的強大之處。webpack 的各種插件、各類型檔案的花式打包、各種玄妙的 bundle 設定⋯⋯才是 webpack 強大且非同凡響的地方。不然其實以上這些功能，使用其他的打包工具也是能達到相同效果的。</p>
+<p>這次只是簡單介紹了一下 webpack 最基本的使用與設定，若要深入感受 webpack 的強大，還是要多去瞭解與研究。</p>
+</article>
+<footer class=book-footer>
+<div class="flex flex-wrap justify-between">
+</div>
+<script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+</footer>
+<div class=book-comments>
+</div>
+<label for=menu-control class="hidden book-menu-overlay"></label>
+</div>
+</main>
+</body>
+</html>
