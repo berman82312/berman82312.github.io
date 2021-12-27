@@ -11,5 +11,5 @@ hasCJKLanguage = true
       hardWraps = true
 
 [params]
-  BookSection = 'posts'
+  BookSection = 'docs'
   BookToC = false
