@@ -1,0 +1,64 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+const { frontmatter, url } = Astro.props;
+import { AstroSeo } from "@astrolib/seo";
+---
+
+<!---
+Use AstroSeo in all the pages you want different Seo than the index page
+-->
+<AstroSeo
+  title={frontmatter.title}
+  description={frontmatter.description}
+  canonical={url}
+  openGraph={{
+    url: url,
+    title: frontmatter.title,
+    description: frontmatter.description,
+    images: [{ url: frontmatter.image.url }],
+    site_name: "Littlefish's Blog",
+  }}
+/>
+<BaseLayout>
+  <section>
+    <div class="px-8 py-12 md:px-12 mx-auto lg:pt-24 max-w-7xl lg:px-32">
+      <div class="lg:text-center">
+        <div class="flex justify-center">
+          <img
+            class="lg:h-auto w-auto object-cover object-center"
+            src={frontmatter.image.url}
+            alt={frontmatter.image?.alt || frontmatter.title}
+          />
+        </div>
+        <div class="flex flex-col md:flex-row mt-4 justify-between">
+          <p class="text-xs text-zinc-500">
+            {frontmatter.date.toString().slice(0, 10)}
+          </p>
+          <div class="flex gap-3">
+            {
+              frontmatter.tags.map((tag) => (
+                <span class="inline-flex items-center uppercase    hover:text-blue-500   text-xs font-medium text-black">
+                  <a href={`/tags/${tag}`}>{tag}</a>
+                </span>
+              ))
+            }
+          </div>
+        </div>
+        <h1
+          class="text-4xl tracking-tight text-balance mt-12 lg:mt-16 font-medium font-display text-black md:text-8xl"
+        >
+          {frontmatter.title}
+        </h1>
+        <p class="max-w-2xl mt-8 mx-auto text-zinc-500">
+          <em>{frontmatter.description}</em>
+        </p>
+      </div>
+
+      <div class="mt-12 max-w-2xl mx-auto">
+        <div class="prose-styles">
+          <slot />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
