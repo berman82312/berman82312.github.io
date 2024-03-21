@@ -1,10 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import EntriesOne from "@/components/entries/EntriesOne.astro";
-import { getCollection } from "astro:content";
+import allPosts from "@/utils/allCollection";
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection("posts");
   const uniqueTags = [
     ...new Set(allPosts.map((post) => post.data.tags).flat()),
   ];
@@ -42,7 +41,7 @@ const { posts } = Astro.props;
         {
           posts.map((post) => (
             <EntriesOne
-              url={"/posts/" + post.slug}
+              url={post.slug}
               title={post.data.title}
               description={post.data.description}
               alt={post.data.title}
