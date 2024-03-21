@@ -1,22 +1,24 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 const { frontmatter, url } = Astro.props;
-import { AstroSeo } from "@astrolib/seo";
+import { SEO } from "astro-seo";
 ---
 
-<!---
-Use AstroSeo in all the pages you want different Seo than the index page
--->
-<AstroSeo
+<SEO
   title={frontmatter.title}
   description={frontmatter.description}
   canonical={url}
   openGraph={{
-    url: url,
-    title: frontmatter.title,
-    description: frontmatter.description,
-    images: [{ url: frontmatter.image.url }],
-    site_name: "Littlefish's Blog",
+    basic: {
+      url: url,
+      title: frontmatter.title,
+      image: frontmatter.image.url,
+      type: "website",
+    },
+    optional: {
+      description: frontmatter.description,
+      siteName: "Littlefish's Blog",
+    },
   }}
 />
 <BaseLayout>
@@ -36,7 +38,7 @@ Use AstroSeo in all the pages you want different Seo than the index page
           </p>
           <div class="flex gap-3">
             {
-              frontmatter.tags.map((tag) => (
+              frontmatter.tags.map((tag: string) => (
                 <span class="inline-flex items-center uppercase    hover:text-blue-500   text-xs font-medium text-black">
                   <a href={`/tags/${tag}`}>{tag}</a>
                 </span>

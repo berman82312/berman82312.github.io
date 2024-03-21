@@ -16,7 +16,7 @@ export async function getStaticPaths() {
     );
     // Sort filtered posts by date in descending order
     const sortedPosts = filteredPosts.sort(
-      (a, b) => new Date(b.data.date) - new Date(a.data.date)
+      (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
     );
 
     return {

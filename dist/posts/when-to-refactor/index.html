@@ -1,0 +1,61 @@
+<!DOCTYPE html><title>什麼時候做重構 (Refactor)？</title><link rel="canonical" href="https://lexingtonthemes.com/posts/when-to-refactor/"><meta name="robots" content="index, follow"><meta property="og:title" content="什麼時候做重構 (Refactor)？"><meta property="og:type" content="website"><meta property="og:image" content="https://source.unsplash.com/professional-ceramics-tile-man-worker-placing-new-tiles-on-the-floor-and-wall-RqR1TfjQdVE"><meta property="og:url" content="https://lexingtonthemes.com/posts/when-to-refactor/"><meta property="og:site_name" content="Littlefish's Blog"> <html lang="en"> <head><title>Littlefish's Blog</title><link rel="canonical" href="https://fishchan.me"><meta name="description" content="Littlefish's blog - posts of strugglings, thoughts and livings"><meta name="robots" content="index, follow"><meta property="og:title" content="Littlefish's Blog"><meta property="og:type" content="website"><meta property="og:image" content="https://fishchan.me/images/cover-min.jpg"><meta property="og:url" content="https://fishchan.me"><meta property="og:description" content="Littlefish's blog - posts of strugglings, thoughts and livings"><meta property="og:site_name" content="Littlefish's Blog"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <meta charset="UTF-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> <meta name="viewport" content="width=device-width, initial-scale=1"> <meta name="author" content="Michael Andreuzza"> <meta name="your keywords" content="Add ypour keywords here"> <!-- Favicon guidelines generated with https://favicon.io/ --> <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon.png"> <link rel="icon" type="image/png" sizes="32x32" href="/images/favicons/favicon-32x32.png"> <link rel="icon" type="image/png" sizes="16x16" href="/images/favicons/favicon-16x16.png"> <link rel="manifest" href="/images/favicons/site.webmanifest"> <link rel="mask-icon" href="/images/favicons/safari-pinned-tab.svg" color="#ffffff"> <meta name="msapplication-TileColor" content="#ffffff"> <meta name="theme-color" content="#ffffff"> <link rel="manifest" href="/favicons/site.webmanifest"> <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#ffffff"> <!-- HTML in your document's head --> <link rel="preconnect" href="https://rsms.me/"> <link rel="stylesheet" href="https://rsms.me/inter/inter.css"> <link href="https://api.fontshare.com/v2/css?f[]=jet-brains-mono@1,2&display=swap" rel="stylesheet"> <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&display=swap" rel="stylesheet"> <link rel="stylesheet" href="/_astro/index.DUjfkajj.css" />
+<link rel="stylesheet" href="/_astro/_slug_.vkDdMgDA.css" /><script type="module" src="/_astro/hoisted.BR64PFV_.js"></script></head> <body class="bg-white flex flex-col min-h-screen"> <div class=" "> <div class=" px-8 md:px-12 mx-auto max-w-7xl py-2  lg:px-32 text-xs"> <div x-data="{ open: false }" class="relative flex flex-col w-full  mx-auto   rounded-xl md:rounded-full md:items-center md:justify-between md:flex-row "> <div class="flex flex-row items-center justify-between md:justify-start"> <a class="text-black hover:text-zinc-500 items-center font-normal uppercase gap-3 inline-flex " href="/">
+Littlefish's blog
+</a> <button @click="open = !open" class="inline-flex items-center justify-center p-2 text-black hover:text-blue-500 focus:outline-none focus:text-black md:hidden"> <svg class="w-6 h-6" stroke="currentColor" fill="none" viewBox="0 0 24 24"> <path :class="{'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path> <path :class="{'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path> </svg> </button> </div> <nav :class="{'flex': open, 'hidden': !open}" class="flex-col flex-grow hidden py-12 md:py-0 md:flex md:items-end justify-center md:flex-row"> <ul class="space-y-2 list-none md:space-y-0 md:ml-auto items-center md:inline-flex justify-center text-center md:text-left gap-8"> <li> <a href="/movies" class="text-black text-md hover:text-blue-500">
+電影
+</a> </li> <li> <a href="https://github.com/berman82312" class="py-1.5 px-4 border focus:ring-2 h-8  rounded-full border-transparent bg-black hover:bg-black/10 text-white duration-200 focus:ring-offset-2 focus:ring-white hover:text-black inline-flex items-center justify-center ring-1 ring-transparent lg:ml-auto" target="_blank">
+GitHub
+</a> </li> </ul> </nav> </div> </div> </div> <main class="flex-grow"> <section> <div class="px-8 py-12 md:px-12 mx-auto lg:pt-24 max-w-7xl lg:px-32"> <div class="lg:text-center"> <div class="flex justify-center"> <img class="lg:h-auto w-auto object-cover object-center" src="https://source.unsplash.com/professional-ceramics-tile-man-worker-placing-new-tiles-on-the-floor-and-wall-RqR1TfjQdVE" alt="#"> </div> <div class="flex flex-col md:flex-row mt-4 justify-between"> <p class="text-xs text-zinc-500"> Wed Apr 12 </p> <div class="flex gap-3"> <span class="inline-flex items-center uppercase    hover:text-blue-500   text-xs font-medium text-black"> <a href="/tags/clean code">clean code</a> </span><span class="inline-flex items-center uppercase    hover:text-blue-500   text-xs font-medium text-black"> <a href="/tags/refactor">refactor</a> </span> </div> </div> <h1 class="text-4xl tracking-tight text-balance mt-12 lg:mt-16 font-medium font-display text-black md:text-8xl"> 什麼時候做重構 (Refactor)？ </h1> <p class="max-w-2xl mt-8 mx-auto text-zinc-500"> <em></em> </p> </div> <div class="mt-12 max-w-2xl mx-auto"> <div class="prose-styles">  <blockquote>
+<p>重構 (Refactor)</p>
+<p>在不改變外部行為的情況下，對內部設計做更動</p>
+</blockquote>
+<p>這問題大概是所有寫程式的新手、中堅，甚至經驗老道的高手，都會困擾的疑惑。寫程式用一種很偏頗的角度來說，其實也是一種文字工作者；如果以文字工作者的角度看待，腦袋就算再好，工作效率的極限大概也就是打字的速度。從簡單的物理公式發想，我們大致上可以這樣極度簡化地說明一個工程師的產出:</p>
+<blockquote>
+<p>產出 = 打字速度 X 時間</p>
+</blockquote>
+<p>既然打字速度有其極限，重點就在於時間了！把時間用在哪裡，就決定了能在哪裡產出多少程式碼（碼農人生 QAQ）。因此，要把時間用在產出新的程式碼，還是去修改舊的程式碼？在衡量工作效益時，就變成一個十分重要的問題。</p>
+<h2 id="至少要能用">至少要能用</h2>
+<p>先別管這個，你聽過⋯⋯咳哼，不對。</p>
+<p><strong>「先別管美觀了，你的程式能用嗎？」</strong></p>
+<p>把這個列為一個重點好像很白痴，但重點是提醒大家在注重、討論程式碼的外觀時，別忘了寫程式的大前提，是要寫一個會動、能用的程式，不要迷失在美觀的追求上。也在此強調儘管小魚認為程式碼的乾淨很重要、非常重要、重要性極高，但一個不會動的程式，沒有美化的意義。如果萬不得已只能寫很醜的一個程式，請還是寫出來，並努力讓它會動、能用。這終究是寫程式的一個最原始、最根本的需求。</p>
+<blockquote>
+<p>在 <em>不改變外部行為</em> 的情況下，對內部設計做更動</p>
+</blockquote>
+<p>有外部行為是這個定義的大前提。因此，小魚認為不要寫了三、五行程式碼，就急著回頭確認寫得好不好看、可讀性好壞、有無符合設計風格。當然，如果你寫個幾行就突然很有靈感要怎麼修改，馬上回頭改我也是沒什麼意見；但如果你在猶豫要繼續往下寫把功能刻好，還是回頭修改剛寫好的程式碼時，請不要猶豫，請務必先讓目前正在撰寫的功能能動。重構是這些外部行為都能正常運作之後，再來考慮的事。</p>
+<h2 id="重構的時機">重構的時機</h2>
+<p>注意：<em><strong>不只是</strong></em> 剛寫完程式碼，確定功能可以正常運作的時候進行重構。</p>
+<blockquote>
+<p>任何時候，當「重構」兩個字閃過你腦海，你就該馬上去做！</p>
+</blockquote>
+<p>重構就是這麼重要，甚至比寫測試重要。我們不一定在開發流程中使用 TDD；但就算是測試，也需要重構。除非你非常確定你的程式碼「永遠」不會有需要更動的可能，或者你單純就想陷害下一個系統維護人員，不然重構程式碼這件事幾乎不該被推遲。</p>
+<p>下面就列出一些幾個可能常常被錯過的重構時間點：</p>
+<h3 id="1-剛完成一個功能">1. 剛完成一個功能</h3>
+<p>這大概是最好的重構時間點，沒有之一。在剛完成一個功能、確定這個功能可以正常運作的情況下，你對這段程式碼正是最熟悉的時刻，你非常清楚整個功能的架構，以及它內部實作的細節。你費盡心思終於讓它能夠運作，別讓自己的努力功虧一簣，重構它、美化它，讓它成為一個可以長期被維護、使用的一段程式碼。</p>
+<p>就是在這個腦袋剛為這個功能特化過的時間點，把程式碼重新整理，增加其可讀性，依據物件導向原則和設計模式做抽象化、封裝，是最有效率的重構時機。你幾乎不會再有哪個時刻比現在更熟悉這個功能的所有細節了，這個時候做重構你最能顧慮所有應顧慮的地方，你也最有把握不會不小心搞砸了什麼區塊，也是最好的時機請同事 Code Review，然後針對他們的建議再做修正。這是個重構成本最小、重構效率最高的時機，並且對日後效益最大的時間點。</p>
+<h3 id="2-爬程式碼發現看不懂的時候">2. 爬程式碼發現看不懂的時候</h3>
+<p>這是個常常被忽略，但其實非常重要的時間點。你已經在「閱讀」它，並且發現你被它困惑，這至少就已經代表一個警訊：「這段程式碼的可讀性欠佳。」就算它是段什麼高明的、暗黑的演算法，是自己知識不足才看不懂，那它至少也缺少了一個東西——幾行註解，告訴我們可以在哪邊找到相關資料。</p>
+<p>不管最後你有沒有看懂，不管是你要親自改、或者請他人改，這段程式碼已經有非常明顯可以被改進的徵兆了，請不要放過它。放著就會忘，忘了下次還是會遇到，還是有可能會卡在這裡，然後又有一個人因此浪費了寶貴的時間。別小看自己，你會卡住的地方，別人也會卡住，不然 Stack Overflow 上為什麼總是能找到答案呢？</p>
+<blockquote>
+<p>LeBlanc’s law: Later equals never.</p>
+</blockquote>
+<h3 id="3-靈光一閃的時候">3. 靈光一閃的時候</h3>
+<p>這段程式碼可能沒什麼大問題，但你就是發覺有更好的寫法；你吃中餐、上廁所、或是逛臉書時，突然想到、或突然發現前些時候撰寫的程式碼，似乎有更好的寫法⋯⋯別猶豫，馬上改。就算手邊沒電腦，也記載筆記本上，把它加進代辦清單。</p>
+<p><strong>拜託，你的靈感都來了，好好珍惜它，這機會不是每天有的啊！</strong></p>
+<p>我們永遠不知道什麼時候一個程式碼會需要被修改、會被誰修改，就算確定只有自己會看，一個乾淨整潔的程式碼，總是比凌亂的要來得好維護、易閱讀，不但降火氣，還可以修身養性。一段容易被維護的程式碼才是好的程式碼，社會是在分工合作的情況下建立的，程式也是，為了自己、為了他人，我們投入在重構的小小時間，可是能對將來許多人帶來莫大效益的！別忘了：</p>
+<blockquote>
+<p>寫程式時，我們花在閱讀程式碼的時間，遠大於花在撰寫的時間</p>
+</blockquote>
+<h2 id="重構不是要你改系統">重構不是要你改系統</h2>
+<p>重構之所以常常讓人猶豫不決，或許是因為有時想到重構，我們會發現需要重構的地方太多了。如果這樣重構下去，不知道要投入多少時間，所以不如還是把精力花在開發新系統吧。但這其實反映了兩個可能：</p>
+<h3 id="1-對你需要重構">1. 對，你需要重構</h3>
+<p>別鬧了，技術債只會愈堆愈高，放著不解不會減少。你不一定要一次全部重構到位，但你確實非常需要重構。不如把這些時間一併排入排程，一點一滴慢慢修，這麼一來才有機會慢慢讓整個系統變好。不然每次都在養債，總有一天債台高築，最後你要想的問題，不是要不要重構，而是要不要拋棄系統重新再刻一個了。</p>
+<p>這絕對只是花費更多的時間成本與人力資源，不會減少你之前堆起的債。</p>
+<h3 id="2-其實你需要的不是重構">2. 其實你需要的不是重構</h3>
+<p>另一種可能，是當你發現要重構的程式碼、類別太多的時候，你或許該仔細想想，有沒有可能是更高層級的「系統架構」出了問題？如果你的重構行為對整個系統有很大的更動，要調整許多東西、會干擾許多現行的功能，那麼你在思考的事情可能已經不是重構了。</p>
+<h2 id="結語">結語</h2>
+<blockquote>
+<p>自己寫的程式碼，三天後看著像自己未長大的孩子；三個月後看著覺得自己老人痴呆；三年後的呢？你變成了伊底帕斯你都不知道。</p>
+</blockquote>
+<p>重構對於程式碼的長期維護非常重要，其重要性僅低於把程式碼寫到會動而已。重構基本上就是一個程式碼的「保值」行為呀！為了未來的自己、同事、那個你不知我也不知的陌生第三人，秉持著互相交流、互相學習、不要互相折磨的善良碼農文化，好好花時間、心思重構程式碼，你會發現你省下的時間遠超過你投入在重構上的成本。</p>  </div> </div> </div> </section> </main> <footer class="bg-white border-t"> <div class="px-8 md:px-12 mx-auto max-w-7xl py-6 lg:px-32"> <section class="gap-y-6 gap-x-8"> <div> <p class="text-sm text-zinc-600 lg:col-span-2" x-data="{ year: new Date().getFullYear() }">
+© <span x-text="year"></span> Littlefish's Blog. All rights reserved. Theme is inspired by <a class="text-sm text-black hover:text-accent-400 underline" href="https://github.com/michael-andreuzza/microblog">Microblog</a>.
+</p> </div> </section> </div> </footer> </body></html>

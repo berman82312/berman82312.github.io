@@ -1,30 +1,24 @@
 ---
 import "../styles/global.css";
-import { AstroSeo } from "@astrolib/seo";
+import { SEO } from "astro-seo";
 ---
 
-<!---
-Use AstroSeo in all the pages you want different Seo than the index page
--->
-<AstroSeo
+<SEO
   title="Littlefish's Blog"
   description="Littlefish's blog - posts of strugglings, thoughts and livings"
   canonical="https://fishchan.me"
   openGraph={{
-    url: "https://fishchan.me",
-    title: "Littlefish's Blog",
-    description:
-      "Littlefish's blog - posts of strugglings, thoughts and livings",
-    images: [
-      {
-        url: "https://fishchan.me/images/cover-min.jpg",
-        width: 2048,
-        height: 1536,
-        alt: "Littlefish's Blog",
-        type: "image/jpeg",
-      },
-    ],
-    site_name: "Littlefish's Blog",
+    basic: {
+      url: "https://fishchan.me",
+      title: "Littlefish's Blog",
+      type: "website",
+      image: "https://fishchan.me/images/cover-min.jpg",
+    },
+    optional: {
+      siteName: "Littlefish's Blog",
+      description:
+        "Littlefish's blog - posts of strugglings, thoughts and livings",
+    },
   }}
 />
 <meta charset="utf-8" />
@@ -75,4 +69,4 @@ Use AstroSeo in all the pages you want different Seo than the index page
   href="https://fonts.googleapis.com/css2?family=Gilda+Display&display=swap"
   rel="stylesheet"
 />
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
