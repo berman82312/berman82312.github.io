@@ -16,6 +16,6 @@ export default defineConfig({
     skipInline: false,
     drafts: true
   },
-  site: 'https://lexingtonthemes.com',
+  site: 'https://blog.fishchan.me',
   integrations: [tailwind(), sitemap(), mdx()]
 });
