@@ -3,7 +3,6 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import EntriesOne from "@/components/entries/EntriesOne.astro";
 import Hero from "@/components/landing/Hero.astro";
 import allPosts from "@/utils/allCollection";
-const more = allPosts.length > 21;
 const pages = allPosts.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 ).slice(0, 21);

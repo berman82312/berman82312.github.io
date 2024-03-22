@@ -3,25 +3,22 @@ import type { GetStaticPaths } from "astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import EntriesOne from "@/components/entries/EntriesOne.astro";
 import Hero from "@/components/landing/Hero.astro";
-import allPosts, { type AllCollectionEntry } from "@/utils/allCollection";
+import allPosts from "@/utils/allCollection";
 
 export const getStaticPaths = (({ paginate }) => {
   const sortedPosts = allPosts.sort(
-    (a: AllCollectionEntry, b: AllCollectionEntry) =>
-      new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
   );
   return paginate(sortedPosts, { pageSize: 21 });
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
 
-const pages: AllCollectionEntry[] = page.data;
+const pages = page.data;
 const tags = [...new Set(pages.map((post) => post.data.tags).flat())];
 
 // Sort posts by date in descending order (newest first)
-const sortedPosts = pages.sort(
-  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
+const sortedPosts = page.data;
 ---
 
 <BaseLayout>
